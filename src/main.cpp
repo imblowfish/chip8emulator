@@ -196,7 +196,46 @@ public:
     }
 };
 
+uint16_t testProgram[] = {
+    0x00E0, // CLS
+    0x00EE,  // RET
+    0x1222, // JP addr
+    0x2222, // CALL addr
+    0x3011, // SE Vx, byte
+    0x4011, // SNE Vx, byte
+    0x5010, // SE Vx, Vy
+    0x6011, // LD Vx, byte
+    0x7011, // ADD Vx, byte
+    0x8010, // LD Vx, Vy
+    0x8011, // OR Vx, Vy
+    0x8012, // AND Vx, Vy
+    0x8013, // XOR Vx, Vy
+    0x8014, // ADD Vx, Vy
+    0x8015, // SUB Vx, Vy
+    0x8016, // SHR Vx {, Vy}
+    0x8017, // SUBN Vx, Vy
+    0x801E, // SHL Vx {, Vy}
+    0x9010, // SNE Vx, Vy
+    0xA111, // LD I, addr
+    0xB111, // JP V0, addr
+    0xC011, // RND Vx, byte
+    0xD011, // DRW Vx, Vy nibble
+    0xE09E, // SKP Vx
+    0xE0A1, // SKNP Vx
+    0xF007, // LD Vx, DT
+    0xF00A, // LD Vx, K
+    0xF015, // LD DT, Vx
+    0xF018, // LD ST, Vx
+    0xF01E, // ADD I, Vx
+    0xF029, // LD F, Vx
+    0xF033, // LD B, Vx
+    0xF055, // LD [I], Vx
+    0xF065  // LD Vx, [I]
+};
+
 int main() {
-    std::cout<<"Hello chip8"<<std::endl;
+    Processor proc;
+    proc.loadProgram(testProgram, sizeof(testProgram) / sizeof(uint16_t));
+    proc.start();
     return 0;
 }
