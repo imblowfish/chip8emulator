@@ -160,6 +160,42 @@ public:
     }
 };
 
+class Processor {
+private:
+    struct Program {
+        uint16_t *data;
+        size_t size;
+    } program;
+public:
+    Processor() {}
+    ~Processor() {}
+
+    int loadProgram(uint16_t *data, size_t size) {
+        this->program = {
+            data,
+            size
+        };
+        std::cout << "Load program to memory" << std::endl;
+        return 0;
+    }
+
+    int start() {
+        std::cout<< "Program start" << std::endl;
+        for(unsigned int i=0; i < program.size; i++) {
+            Context ctx(*(program.data + i));
+            ctx.print();
+            OperationFactory::Operation op = OperationFactory::getOperation(ctx);
+            if(!op) {
+                fprintf(stderr, "Error: Wrong opcode 0x%04X\n", ctx.opcode);
+                return -1;
+            }
+            op(ctx);
+        }
+        std::cout << "Program end" << std::endl;
+        return 0;
+    }
+};
+
 int main() {
     std::cout<<"Hello chip8"<<std::endl;
     return 0;
