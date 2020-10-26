@@ -1,5 +1,32 @@
 #include <iostream>
+#include <chrono>
 
+// Timer
+class Timer {
+private:
+    std::chrono::milliseconds timeout;
+    std::chrono::milliseconds last_timestamp;
+    Timer() = delete;
+public:
+    Timer(int64_t ms_timeout) {
+        timeout =  static_cast<std::chrono::milliseconds>(ms_timeout);
+    }
+    void start() {
+        using namespace std::chrono;
+        last_timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+    }
+    bool is_finished() {
+        using namespace std::chrono;
+        milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+        milliseconds diff = now - last_timestamp;
+        if(now - last_timestamp > timeout) {
+            return true;
+        }
+        return false;
+    }
+};
+
+// Context
 class Context {
 public:
     uint16_t opcode;
@@ -36,6 +63,7 @@ public:
     }
 };
 
+// Operations
 class Operations {
 private:
     Operations() = delete;
@@ -93,6 +121,7 @@ public:
     OP_DEF(drw_x_y_nibble, (void)ctx;)
 };
 
+// OperationFactory
 class OperationFactory {
 public:
     #define OP(opname) Operations::opname
@@ -160,77 +189,99 @@ public:
     }
 };
 
+// Processor
 class Processor {
 private:
-    struct Program {
-        uint16_t *data;
-        size_t size;
-    } program;
+    const size_t START_PROGRAM_ADDRESS = 0x200;
+    const int FREQUENCY = 1.0 / 60 * 1000;
+    
+    Timer timer;
+    size_t pc;
+    uint8_t memory[4096] = {0};
+    uint8_t V[16] = {0};
+    uint16_t I = 0;
+    
 public:
-    Processor() {}
-    ~Processor() {}
+    Processor() : timer(FREQUENCY), pc(0) {
+    }
+    ~Processor() {
+    }
 
-    int loadProgram(uint16_t *data, size_t size) {
-        this->program = {
-            data,
-            size
-        };
-        std::cout << "Load program to memory" << std::endl;
+    int loadProgram(uint8_t *program, size_t size) {
+        for(unsigned int i=0; i < size; i++) {
+            memory[START_PROGRAM_ADDRESS + i] = program[i];
+        }
         return 0;
     }
 
-    int start() {
-        std::cout<< "Program start" << std::endl;
-        for(unsigned int i=0; i < program.size; i++) {
-            Context ctx(*(program.data + i));
-            ctx.print();
-            OperationFactory::Operation op = OperationFactory::getOperation(ctx);
-            if(!op) {
-                fprintf(stderr, "Error: Wrong opcode 0x%04X\n", ctx.opcode);
-                return -1;
-            }
-            op(ctx);
+    void start() {
+        std::cout << "Run program" << std::endl;
+        pc = START_PROGRAM_ADDRESS;
+        step();
+    }
+
+    void step() {
+        if(pc >= sizeof(memory)) {
+            printf("Memory error, pc 0x%04llX, memory 0x%04llX\n", pc, sizeof(memory));
+            return;
         }
+        uint16_t opcode = (memory[pc] << 8) | memory[pc + 1];
+        if(!opcode) {
+            end();
+            return;
+        }
+        pc += 2;
+        Context ctx(opcode);
+        OperationFactory::Operation op = OperationFactory::getOperation(ctx);
+        int res = op(ctx);
+        if(res != 0) {
+            return;
+        }
+        timer.start();
+        while(!timer.is_finished());
+        step();
+    }
+
+    void end() {
         std::cout << "Program end" << std::endl;
-        return 0;
     }
 };
 
-uint16_t testProgram[] = {
-    0x00E0, // CLS
-    0x00EE,  // RET
-    0x1222, // JP addr
-    0x2222, // CALL addr
-    0x3011, // SE Vx, byte
-    0x4011, // SNE Vx, byte
-    0x5010, // SE Vx, Vy
-    0x6011, // LD Vx, byte
-    0x7011, // ADD Vx, byte
-    0x8010, // LD Vx, Vy
-    0x8011, // OR Vx, Vy
-    0x8012, // AND Vx, Vy
-    0x8013, // XOR Vx, Vy
-    0x8014, // ADD Vx, Vy
-    0x8015, // SUB Vx, Vy
-    0x8016, // SHR Vx {, Vy}
-    0x8017, // SUBN Vx, Vy
-    0x801E, // SHL Vx {, Vy}
-    0x9010, // SNE Vx, Vy
-    0xA111, // LD I, addr
-    0xB111, // JP V0, addr
-    0xC011, // RND Vx, byte
-    0xD011, // DRW Vx, Vy nibble
-    0xE09E, // SKP Vx
-    0xE0A1, // SKNP Vx
-    0xF007, // LD Vx, DT
-    0xF00A, // LD Vx, K
-    0xF015, // LD DT, Vx
-    0xF018, // LD ST, Vx
-    0xF01E, // ADD I, Vx
-    0xF029, // LD F, Vx
-    0xF033, // LD B, Vx
-    0xF055, // LD [I], Vx
-    0xF065  // LD Vx, [I]
+uint8_t testProgram[] = {
+    0x00, 0xE0, // CLS
+    0x00, 0xEE,  // RET
+    0x12, 0x22, // JP addr
+    0x22, 0x22, // CALL addr
+    0x30, 0x11, // SE Vx, byte
+    0x40, 0x11, // SNE Vx, byte
+    0x50, 0x10, // SE Vx, Vy
+    0x60, 0x11, // LD Vx, byte
+    0x70, 0x11, // ADD Vx, byte
+    0x80, 0x10, // LD Vx, Vy
+    0x80, 0x11, // OR Vx, Vy
+    0x80, 0x12, // AND Vx, Vy
+    0x80, 0x13, // XOR Vx, Vy
+    0x80, 0x14, // ADD Vx, Vy
+    0x80, 0x15, // SUB Vx, Vy
+    0x80, 0x16, // SHR Vx {, Vy}
+    0x80, 0x17, // SUBN Vx, Vy
+    0x80, 0x1E, // SHL Vx {, Vy}
+    0x90, 0x10, // SNE Vx, Vy
+    0xA1, 0x11, // LD I, addr
+    0xB1, 0x11, // JP V0, addr
+    0xC0, 0x11, // RND Vx, byte
+    0xD0, 0x11, // DRW Vx, Vy nibble
+    0xE0, 0x9E, // SKP Vx
+    0xE0, 0xA1, // SKNP Vx
+    0xF0, 0x07, // LD Vx, DT
+    0xF0, 0x0A, // LD Vx, K
+    0xF0, 0x15, // LD DT, Vx
+    0xF0, 0x18, // LD ST, Vx
+    0xF0, 0x1E, // ADD I, Vx
+    0xF0, 0x29, // LD F, Vx
+    0xF0, 0x33, // LD B, Vx
+    0xF0, 0x55, // LD [I], Vx
+    0xF0, 0x65  // LD Vx, [I]
 };
 
 int main() {
