@@ -24,7 +24,7 @@ all: ${OBJS}
 	@echo Building done
 
 ${OBJ_DIR}/%.o: ${SRC_DIR}/%.cpp
-	${CXX} ${CXX_FLAGS} -c -o $@ $<
+	${CXX} ${INC_PATH} ${CXX_FLAGS} -c -o $@ $<
 
 run:
 	${BUILD_DIR}/${TARGET}
