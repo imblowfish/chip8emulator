@@ -23,7 +23,6 @@ OperationFactory::Operation OperationFactory::getOperation(Context &ctx) {
                     OP(shr_x_y), OP(subn_x_y)
                 };
                 if(ctx.nibble > sizeof(ariphmetics) / sizeof(Operation)) {
-                    fprintf(stderr, "Error: Wrong operation opcode 0x%04X", ctx.nibble);
                     return nullptr;
                 }
                 return ariphmetics[ctx.nibble];
