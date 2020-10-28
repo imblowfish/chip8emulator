@@ -6,6 +6,8 @@ private:
     bool keys[16];
 public:
     Keyboard();
+    bool isPressed(uint8_t key);
+    uint8_t waitKey();
 };
 
 #endif
