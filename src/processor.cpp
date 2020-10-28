@@ -13,11 +13,13 @@
 Processor::Processor() : START_PROGRAM_ADDRESS(0x200), 
                          FREQUENCY(1.0 / 60 * 1000), 
                          timer(FREQUENCY), 
-                         pc(0), 
+                         pc(0),
+                         DT(0),
+                         ST(0),
                          I(0) {
+    // TODO: Add initialization of arrays in initialize list
     memset(memory, 0, sizeof(memory));
     memset(V, 0, sizeof(V));
-    memset(stack, 0, sizeof(stack));
     loadSprites();
 }
 
@@ -62,7 +64,7 @@ void Processor::start() {
     pc = START_PROGRAM_ADDRESS;
     step();
 }
-void *a;
+
 void Processor::step() {
     if (pc >= sizeof(memory)) {
         printf("Memory error, pc 0x%04llX, memory 0x%04llX\n", pc, sizeof(memory));
@@ -74,22 +76,53 @@ void Processor::step() {
         return;
     }
     pc += 2;
+    printf("Execute %04X opcode\n", opcode);
     Context ctx(opcode);
     OperationFactory::Operation op = OperationFactory::getOperation(ctx);
     if(!op) {
-        printf("Wrong ocpode %04X\n", opcode);
+        printf("Wrong opcode %04X\n", opcode);
         return;
     }
-    int res = op(ctx);
+    int res = op(ctx, *this);
     if (res != 0) {
+        printf("Operation res %d\n", res);
         return;
     }
-    timer.start();
-    while (!timer.is_finished()) {
+    timer.wait();
+    if(ST) {
+        // make sound
+        ST--;
+    }
+    if(DT) {
+        // make sound
+        DT--;
+    }
+    if(ST || DT) {
+        timer.start();
     }
     step();
 }
 
 void Processor::end() { 
     std::cout << "Program end" << std::endl; 
+}
+
+Timer& Processor::getTimer() {
+    return timer;
+}
+
+Display& Processor::getDisplay() {
+    return display;
+}
+
+Keyboard& Processor::getKeyboard() {
+    return keyboard;
+}
+
+Stack& Processor::getStack() {
+    return stack;
+}
+
+uint16_t Processor::getSprite(uint8_t spriteNum) {
+    return memory[spriteNum * sizeof(uint8_t)];
 }
