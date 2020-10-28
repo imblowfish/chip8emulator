@@ -1,13 +1,17 @@
 #ifndef __CHIP8_OPERATIONS_H__
 #define __CHIP8_OPERATIONS_H__
 
+class Context;
+class Processor;
+
 class Operations {
 private:
     Operations() = delete;
     Operations(const Operations&) = delete;
     ~Operations() = delete;
 public:
-    #define OP_PARAMS [[maybe_unused]]Context &ctx
+    #define OP_PARAMS [[maybe_unused]]Context &ctx,\
+                      [[maybe_unused]]Processor &proc \
     
     // 0x0... operations
     static int cls(OP_PARAMS);
