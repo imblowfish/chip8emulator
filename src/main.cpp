@@ -2,6 +2,9 @@
 
 #include "processor.h"
 
+// TODO: Add program reading from file
+// TODO: Make the processor class a singleton 
+
 uint8_t testProgram[] = {
     0x00, 0xE0, // CLS
     0x00, 0xEE,  // RET
