@@ -1,4 +1,5 @@
 bin/*
 obj/*
+test_programs/*
 .vscode/*
 doodles
