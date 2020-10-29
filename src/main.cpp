@@ -1,7 +1,6 @@
 #include "chip8/processor.h"
 
 // TODO: Add program reading from file
-// TODO: Make the processor class a singleton 
 
 // uint8_t testProgram[] = {
 //     0x00, 0xE0, // CLS
@@ -41,7 +40,6 @@
 // };
 
 int main() {
-    Processor chip8;
-    
+    Chip8::Processor chip8;
     return 0;
 }
