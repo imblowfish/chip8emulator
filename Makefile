@@ -9,11 +9,12 @@ CXX=g++
 CXX_FLAGS=-fPIC -Wall -Wextra
 
 # Includes
-INC_PATH=\
--I./include
+INC_PATH=-I./include
+TMP_INC=${shell dir .\include /s /b /ad}
+INC_PATH+=${TMP_INC:%=-I./include/%}
 
 # Sources
-SRC=${wildcard ${SRC_DIR}/*.cpp}
+SRC=${shell dir .\src /s /b /a-d}
 
 # Objects
 OBJS=${SRC:${SRC_DIR}/%.cpp=${OBJ_DIR}/%.o}
