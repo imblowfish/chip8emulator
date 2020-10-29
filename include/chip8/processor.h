@@ -23,16 +23,15 @@ private:
     std::shared_ptr<Memory> memory;
     std::shared_ptr<Display> display;
     std::shared_ptr<Keyboard> keyboard;
+
+    bool step();
+    uint16_t fetch();
+    bool execute(uint16_t opcode);
 public:
     Registers regs;
 
     Processor();
-
     void start();
-    bool step();
-
-    uint16_t fetch();
-    bool execute(uint16_t opcode);
 
     Memory& getMemory();
     Display& getDisplay();
