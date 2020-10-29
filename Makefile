@@ -1,12 +1,11 @@
 # Project setups
 TARGET=main.exe
-OBJ_DIR=./obj
 BUILD_DIR=./bin
 SRC_DIR=./src
 
 # Compiler options
 CXX=g++
-CXX_FLAGS=-fPIC -Wall -Wextra
+CXX_FLAGS=-fPIC -Wall -Wextra -Werror
 
 # Includes
 INC_PATH=-I./include
@@ -14,17 +13,18 @@ TMP_INC=${shell dir .\include /s /b /ad}
 INC_PATH+=${TMP_INC:%=-I./include/%}
 
 # Sources
-SRC=${shell dir .\src /s /b /a-d}
+SRC=${shell dir .\src\*.cpp /s /b /a-d}
 
 # Objects
-OBJS=${SRC:${SRC_DIR}/%.cpp=${OBJ_DIR}/%.o}
+OBJS=${SRC:%.cpp=%.o}
 
+.PHONY: all
 all: ${OBJS}
 	@echo Building...
-	${CXX} ${CXX_FLAGS} ${INC_PATH} ${OBJS} -o ${BUILD_DIR}/${TARGET}
+	${CXX} ${OBJS} ${INC_PATH} ${CXX_FLAGS} -o ${BUILD_DIR}/${TARGET}
 	@echo Building done
 
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.cpp
+%.o: %.cpp
 	${CXX} ${INC_PATH} ${CXX_FLAGS} -c -o $@ $<
 
 run:
@@ -33,6 +33,6 @@ run:
 build_and_run: all run
 
 clean:
-	del /S /q .\obj\*
+	del /S /q ${OBJS}
 
 
