@@ -1,6 +1,6 @@
 #include <cstdint>
 
-#include "keyboard.h"
+#include "device/keyboard.h"
 
 Keyboard::Keyboard() : keys{0} {
 

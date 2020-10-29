@@ -1,7 +1,6 @@
 #include <cstdint>
 #include <cstring>
-
-#include "display.h"
+#include "device/display.h"
 
 Display::Display() : buf{0} {
 

@@ -1,6 +1,6 @@
 #include <cstdint>
 
-#include "timer.h"
+#include "chip8/timer.h"
 
 Timer::Timer(int64_t ms_timeout) : isStarted(false) {
     timeout =  static_cast<std::chrono::milliseconds>(ms_timeout);

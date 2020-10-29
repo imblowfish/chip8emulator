@@ -2,8 +2,8 @@
 #include <cstdint>
 
 #include "context.h"
-#include "operations.h"
-#include "operation_factory.h"
+#include "operation/operations.h"
+#include "operation/operation_factory.h"
 
 OperationFactory::Operation OperationFactory::getOperation(Context &ctx) {
     // parse here
