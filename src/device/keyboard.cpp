@@ -1,5 +1,5 @@
 #include <cstdint>
-
+#include <conio.h>
 #include "device/keyboard.h"
 
 namespace Device {
@@ -11,7 +11,12 @@ namespace Device {
     }
 
     uint8_t Keyboard::waitKey() {
-        // TODO: add wait key here
+        while(true) {
+            char key = getch();
+            if((key >= '0' && key <= '9') ||  (key >= 'a' && key <= 'f')) {
+                return key;
+            }
+        }
         return 0;
     }
 } // namespace Device
