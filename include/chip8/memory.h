@@ -1,6 +1,8 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
+#include <vector>
+
 namespace Chip8 {
     class Memory {
     private:
@@ -14,11 +16,12 @@ namespace Chip8 {
         uint8_t data[4096];
 
         void loadSprites();
+        bool inMemoryLimits(unsigned int idx);
 
     public:
         Memory();
 
-        uint8_t &operator[](size_t idx);
+        uint8_t &operator[](size_t idx)  throw();
         void push(uint8_t value);
         uint8_t pop();
 

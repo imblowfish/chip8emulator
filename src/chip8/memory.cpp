@@ -1,7 +1,9 @@
+#include <cstring>
 #include <cstdint>
-#include <memory.h>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <stdexcept>
 
 #include "chip8/memory.h"
 
@@ -40,8 +42,18 @@ namespace Chip8 {
         }
     }
 
-    uint8_t &Memory::operator[](size_t idx) {
-        // TODO: Add limits check here
+    bool Memory::inMemoryLimits(unsigned int idx) {
+        if(idx <= sizeof(data)) {
+            return true;
+        }
+        return false;
+    }
+
+    uint8_t& Memory::operator[](size_t idx) throw() {
+        if(!inMemoryLimits(idx)) {
+            std::string errorMsg = "Wrong memory index " + std::to_string(idx);
+            throw std::out_of_range(errorMsg);
+        }
         return data[idx];
     }
 
@@ -60,7 +72,9 @@ namespace Chip8 {
     }
 
     bool Memory::loadProgram(uint8_t *program, size_t size) {
-        // TODO: Add limits check here
+        if(!inMemoryLimits(PROG_START + size)) {
+            return false;
+        }
         for(unsigned int i = 0; i < size; i++) {
             data[PROG_START + i] = program[i];
         }
@@ -68,10 +82,14 @@ namespace Chip8 {
     }
 
     bool Memory::loadProgram(std::vector<uint8_t> program) {
-        // TODO: Add limits check here
+        if(!inMemoryLimits(PROG_START + program.size())) {
+            return false;
+        }
+        std::cout << "Start program loading" << std::endl;
         for(unsigned int i = 0; i < program.size(); i++) {
             data[PROG_START + i] = program[i];
         }
+        std::cout << "Program load success" << std::endl;
         return true;
     }
 
