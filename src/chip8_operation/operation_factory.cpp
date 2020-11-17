@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <cstdint>
 
 #include "context.h"
@@ -7,7 +6,6 @@
 
 namespace Chip8Operation {
     OperationFactory::Operation OperationFactory::getOperation(Context &ctx) {
-        // parse here
         switch(ctx.opcode) {
             CASE_OP(0x00E0, cls);
             CASE_OP(0x00EE, ret);
@@ -48,18 +46,19 @@ namespace Chip8Operation {
                     default:
                         return nullptr;
                 }
-                CASE_OP(0x1, jp_to_addr);
-                CASE_OP(0x2, call_addr);
-                CASE_OP(0x3, se_x_kk);
-                CASE_OP(0x4, sne_x_kk);
-                CASE_OP(0x5, se_x_y);
-                CASE_OP(0x6, ld_x_kk);
-                CASE_OP(0x7, add_x_kk);
-                CASE_OP(0x9, sne_x_y);
-                CASE_OP(0xA, ld_I_addr);
-                CASE_OP(0xB, jp_v0_addr);
-                CASE_OP(0xC, rnd_x_kk);
-                CASE_OP(0xD, drw_x_y_nibble);
+                break;
+            CASE_OP(0x1, jp_to_addr);
+            CASE_OP(0x2, call_addr);
+            CASE_OP(0x3, se_x_kk);
+            CASE_OP(0x4, sne_x_kk);
+            CASE_OP(0x5, se_x_y);
+            CASE_OP(0x6, ld_x_kk);
+            CASE_OP(0x7, add_x_kk);
+            CASE_OP(0x9, sne_x_y);
+            CASE_OP(0xA, ld_I_addr);
+            CASE_OP(0xB, jp_v0_addr);
+            CASE_OP(0xC, rnd_x_kk);
+            CASE_OP(0xD, drw_x_y_nibble);
         }
         return nullptr;
     }

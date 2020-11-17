@@ -1,15 +1,11 @@
 #include <cstdint>
 #include <cstdlib>
-#include <vector>
 
 #include "context.h"
-
 #include "device/display.h"
 #include "device/keyboard.h"
-
 #include "chip8/memory.h"
 #include "chip8/processor.h"
-
 #include "chip8_operation/operations.h"
 
 namespace Chip8Operation {
