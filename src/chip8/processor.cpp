@@ -26,11 +26,14 @@ namespace Chip8 {
     void Processor::start() {
         regs.pc = memory->getProgStartAddress();
         Timer timer(FREQUENCY);
+        std::cout << "Program start" << std::endl;
         while(true) {
             timer.start();
             if(!step()) {
+                std::cout << "Program end" << std::endl;
                 break;
             }
+            display->show();
             timer.wait();
         }
     }
@@ -39,6 +42,7 @@ namespace Chip8 {
         uint16_t opcode = fetch();
         regs.pc += 2;
         if(!opcode) {
+            printf("Zero opcode 0x%04X pc=%lld\n", opcode, regs.pc);
             return false;
         }
         return execute(opcode);
@@ -53,20 +57,21 @@ namespace Chip8 {
         Context ctx(opcode);
         OperationFactory::Operation op = OperationFactory::getOperation(ctx);
         if(!op) {
+            printf("Unknown opcode 0x%04X pc=%lld\n", opcode, regs.pc);
             return false;
         }
         return op(ctx, *this) == 0;
     }
 
-    Memory &Processor::getMemory() {
+    Memory& Processor::getMemory() {
         return *memory;
     }
 
-    Device::Display &Processor::getDisplay() {
+    Device::Display& Processor::getDisplay() {
         return *display;
     }
 
-    Device::Keyboard &Processor::getKeyboard() {
+    Device::Keyboard& Processor::getKeyboard() {
         return *keyboard;
     }
 } // namespace Chip8
