@@ -4,6 +4,8 @@
 namespace Device {
     class Display {
     private:
+        const unsigned int width;
+        const unsigned int height;
         uint16_t buf[2048];
 
     public:
@@ -11,6 +13,7 @@ namespace Device {
 
         void clearScreen();
         bool draw(uint8_t x, uint8_t y, uint8_t row, uint8_t spriteLine);
+        void show();
     };
 } // namespace Device
 
