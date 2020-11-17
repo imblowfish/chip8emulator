@@ -14,15 +14,15 @@ Context::Context(const uint16_t opcode) : opcode(opcode) {
 
 void Context::print() {
     printf( "==============\n"
-                "   Context:   \n"
-                "==============\n"
-                "opcode: 0x%04X\n"
-                "nibble: 0x%04X\n"
-                "x:      0x%04X\n"
-                "y:      0x%04X\n"
-                "kk:     0x%04X\n"
-                "head:   0x%04X\n"
-                "==============\n", 
-                opcode, nibble, 
-                x, y, kk, head );
+            "   Context:   \n"
+            "==============\n"
+            "opcode: 0x%04X\n"
+            "nibble: 0x%04X\n"
+            "x:      0x%04X\n"
+            "y:      0x%04X\n"
+            "kk:     0x%04X\n"
+            "head:   0x%04X\n"
+            "==============\n", 
+            opcode, nibble, 
+            x, y, kk, head );
 }
