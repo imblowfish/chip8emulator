@@ -3,3 +3,4 @@ bin/*
 test_programs/*
 .vscode/*
 doodles
+.clang-format
