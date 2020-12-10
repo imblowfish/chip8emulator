@@ -1,5 +1,5 @@
 # Project setups
-TARGET=main.exe
+TARGET=chip8.exe
 BUILD_DIR=./bin
 SRC_DIR=./src
 
