@@ -28,8 +28,8 @@ namespace Chip8 {
         bool loadProgram(uint8_t *program, size_t size);
         bool loadProgram(std::vector<uint8_t> program);
 
-        size_t getProgStartAddress();
-        uint16_t getSpriteAddress(uint8_t spriteNum);
+        size_t getProgStartAddress() const;
+        uint16_t getSpriteAddress(uint8_t spriteNum) const;
     };
 } // namespace Chip8
 

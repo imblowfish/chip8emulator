@@ -43,10 +43,7 @@ namespace Chip8 {
     }
 
     bool Memory::inMemoryLimits(unsigned int idx) {
-        if(idx <= sizeof(data)) {
-            return true;
-        }
-        return false;
+        return idx <= sizeof(data);
     }
 
     uint8_t& Memory::operator[](size_t idx) throw() {
@@ -93,11 +90,11 @@ namespace Chip8 {
         return true;
     }
 
-    size_t Memory::getProgStartAddress() {
+    size_t Memory::getProgStartAddress() const {
         return PROG_START;
     }
 
-    uint16_t Memory::getSpriteAddress(uint8_t spriteNum) {
+    uint16_t Memory::getSpriteAddress(uint8_t spriteNum) const {
         return spriteNum * 5;
     }
 } // namespace Chip8

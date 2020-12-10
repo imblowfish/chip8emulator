@@ -5,7 +5,7 @@
 #include "chip8_operation/operation_factory.h"
 
 namespace Chip8Operation {
-    OperationFactory::Operation OperationFactory::getOperation(Context &ctx) {
+    OperationFactory::Operation OperationFactory::getOperation(const Context &ctx) {
         switch(ctx.opcode) {
             CASE_OP(0x00E0, cls);
             CASE_OP(0x00EE, ret);

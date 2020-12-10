@@ -12,7 +12,7 @@ namespace Chip8Operation {
         return OP(opname)
         using Operation = int (*)(OP_PARAMS);
 
-        static Operation getOperation(Context &ctx);
+        static Operation getOperation(const Context &ctx);
     };
 } // namespace Operation
 
