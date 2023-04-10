@@ -1,27 +1,24 @@
-#include <string>
 #include <iostream>
+#include <argparse/argparse.hpp>
+#include <fmt/core.h>
 
-#include "program_reader.h"
-#include "chip8/memory.h"
-#include "chip8/processor.h"
-
-void printHelp() {
-    std::cout << "Chip8 emulator" << std::endl;
-    std::cout << "DESCRIPTION:" << std::endl;
-    std::cout << "\tsimple chip8 emulator with console display" << std::endl;
-    std::cout << "SYNOPSIS" << std::endl;
-    std::cout << "\tchip8 <chip8_rom_filepath>" << std::endl;
-}
+#include "project.h"
+#include "chip8/chip8.h"
 
 int main(int argc, char **argv) {
-    if(argc != 2) {
-        std::cout << "Error: Wrong arguments num" << std::endl;
-        printHelp();
-        return -1;
-    }
-    std::string filepath = argv[1];
-    Chip8::Processor chip8;
-    chip8.getMemory().loadProgram(ProgramReader::readProgram(filepath));
-    chip8.start();
-    return 0;
+  argparse::ArgumentParser program(project.name, project.version);
+
+  program.add_description("Chip8 emulator");
+  program.add_argument("ROM path").help("Path to Chip8 ROM file");
+
+  try {
+    program.parse_args(argc, argv);
+  } catch (const std::runtime_error &err) {
+    std::cerr << err.what() << "\n";
+    std::cerr << program;
+    return 1;
+  }
+  Chip8::Chip8 chip8{program.get("ROM path")};
+  chip8.start();
+  return 0;
 }

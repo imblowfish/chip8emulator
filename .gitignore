@@ -1,6 +1,5 @@
-*.o
-bin/*
-test_programs/*
-.vscode/*
-doodles
-.clang-format
+build/
+3rdparty/
+scripts/
+
+src/project.h

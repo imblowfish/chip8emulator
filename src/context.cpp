@@ -1,28 +1,26 @@
-#include <cstdint>
-#include <cstdio>
 
 #include "context.h"
 
+#include <fmt/core.h>
+
 Context::Context(const uint16_t opcode) : opcode(opcode) {
-    head = (opcode & 0xF000) >> 12;
-    x = (opcode & 0x0F00) >> 8;
-    y = (opcode & 0x00F0) >> 4;
-    nibble = opcode & 0x000F;
-    kk = opcode & 0x00FF;
-    addr = opcode & 0x0FFF;
+  head   = (opcode & 0xF000) >> 12;
+  x      = (opcode & 0x0F00) >> 8;
+  y      = (opcode & 0x00F0) >> 4;
+  nibble = opcode & 0x000F;
+  kk     = opcode & 0x00FF;
+  addr   = opcode & 0x0FFF;
 }
 
 void Context::print() {
-    printf( "==============\n"
-            "   Context:   \n"
-            "==============\n"
-            "opcode: 0x%04X\n"
-            "nibble: 0x%04X\n"
-            "x:      0x%04X\n"
-            "y:      0x%04X\n"
-            "kk:     0x%04X\n"
-            "head:   0x%04X\n"
-            "==============\n", 
-            opcode, nibble, 
-            x, y, kk, head );
+  fmt::println("==============");
+  fmt::println("   Context:   ");
+  fmt::println("==============");
+  fmt::println("opcode: 0x{:X}", opcode);
+  fmt::println("nibble: 0x{:X}", nibble);
+  fmt::println("x:      0x{:X}", x);
+  fmt::println("y:      0x{:X}", y);
+  fmt::println("kk:     0x{:X}", kk);
+  fmt::println("head:   0x{:X}", head);
+  fmt::println("==============");
 }

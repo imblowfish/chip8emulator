@@ -1,0 +1,10 @@
+#include <string>
+
+namespace {
+struct Project {
+  const std::string name{"${CMAKE_PROJECT_NAME}"};
+  const std::string version{"${CMAKE_PROJECT_VERSION}"};
+};
+} // namespace
+
+Project project{};
