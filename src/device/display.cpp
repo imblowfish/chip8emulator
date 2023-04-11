@@ -1,6 +1,6 @@
 #include "device/display.h"
 
-#include <fmt/core.h>
+#include "ph.hpp"
 
 namespace device {
 Display::Display() : width(64), height(32), buf{0} {}

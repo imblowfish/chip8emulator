@@ -1,10 +1,6 @@
 #ifndef __CHIP8_PROCESSOR_H__
 #define __CHIP8_PROCESSOR_H__
 
-#include <chrono>
-#include <memory>
-#include <filesystem>
-
 namespace device {
 class Display;
 class Keyboard;

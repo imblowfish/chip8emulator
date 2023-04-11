@@ -1,8 +1,6 @@
 #ifndef __CHIP8_CONTEXT_H__
 #define __CHIP8_CONTEXT_H__
 
-#include <cstdint>
-
 class Context {
 public:
   uint16_t opcode;

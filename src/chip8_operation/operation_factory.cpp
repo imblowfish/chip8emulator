@@ -1,8 +1,8 @@
-#include <cstdint>
+#include "chip8_operation/operation_factory.h"
 
+#include "ph.hpp"
 #include "context.h"
 #include "chip8_operation/operations.h"
-#include "chip8_operation/operation_factory.h"
 
 namespace chip8Operation {
 OperationFactory::Operation OperationFactory::getOperation(const Context &ctx) {

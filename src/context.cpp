@@ -1,7 +1,6 @@
-
 #include "context.h"
 
-#include <fmt/core.h>
+#include "ph.hpp"
 
 Context::Context(const uint16_t opcode) : opcode(opcode) {
   head   = (opcode & 0xF000) >> 12;

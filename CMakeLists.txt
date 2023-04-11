@@ -23,6 +23,8 @@ target_compile_options(
     PRIVATE -W -Wall -Wextra -pedantic -fPIC
 )
 
+target_precompile_headers(${PROJECT_NAME} PRIVATE src/ph.hpp)
+
 file(GLOB_RECURSE SOURCES src/*.cpp)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src/)

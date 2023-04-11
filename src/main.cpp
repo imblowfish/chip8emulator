@@ -1,8 +1,6 @@
-#include <iostream>
-#include <argparse/argparse.hpp>
-#include <fmt/core.h>
-
+#include "ph.hpp"
 #include "project.h"
+
 #include "chip8/chip8.h"
 
 int main(int argc, char **argv) {

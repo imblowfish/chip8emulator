@@ -1,12 +1,6 @@
-#include <fstream>
-#include <cstring>
-#include <cstdint>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <stdexcept>
-
 #include "chip8/memory.h"
+
+#include "ph.hpp"
 
 namespace chip8 {
 Memory::Memory() {

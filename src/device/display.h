@@ -1,9 +1,6 @@
 #ifndef __CHIP8_DISPLAY_H__
 #define __CHIP8_DISPLAY_H__
 
-#include <array>
-#include <cstdint>
-
 namespace device {
 class Display {
 private:
