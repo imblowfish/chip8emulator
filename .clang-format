@@ -4,5 +4,4 @@ AlignConsecutiveDeclarations: true
 AlignEscapedNewlines: Left
 ContinuationIndentWidth: 2
 IndentCaseLabels: true
-SortIncludes: false
 ColumnLimit: 100
