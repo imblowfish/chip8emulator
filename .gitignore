@@ -1,5 +1,5 @@
 build/
-3rdparty/
 scripts/
+third-party/
 
 src/project.h
