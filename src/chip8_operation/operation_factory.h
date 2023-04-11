@@ -3,7 +3,7 @@
 
 #include "operations.h"
 
-namespace Chip8Operation {
+namespace chip8Operation {
 class OperationFactory {
 public:
 #define OP(opname) Operations::opname
@@ -14,6 +14,6 @@ public:
 
   static Operation getOperation(const Context &ctx);
 };
-} // namespace Chip8Operation
+} // namespace chip8Operation
 
 #endif

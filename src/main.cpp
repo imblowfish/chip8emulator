@@ -18,7 +18,8 @@ int main(int argc, char **argv) {
     std::cerr << program;
     return 1;
   }
-  Chip8::Chip8 chip8{program.get("ROM path")};
+
+  chip8::Chip8 chip8{program.get("ROM path")};
   chip8.start();
   return 0;
 }

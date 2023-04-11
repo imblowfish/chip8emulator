@@ -7,11 +7,11 @@
 #include "chip8_operation/operation_factory.h"
 #include "chip8/memory.h"
 
-namespace Chip8 {
+namespace chip8 {
 Chip8::Chip8(std::filesystem::path romPath) {
   memory   = std::make_shared<Memory>();
-  display  = std::make_shared<Device::Display>();
-  keyboard = std::make_shared<Device::Keyboard>();
+  display  = std::make_shared<device::Display>();
+  keyboard = std::make_shared<device::Keyboard>();
 
   memory->loadProgram(romPath);
 }
@@ -54,7 +54,7 @@ bool Chip8::step() {
 uint16_t Chip8::fetch() { return (*memory)[regs.pc] << 8 | (*memory)[regs.pc + 1]; }
 
 bool Chip8::execute(uint16_t opcode) {
-  using namespace Chip8Operation;
+  using namespace chip8Operation;
   Context                     ctx(opcode);
   OperationFactory::Operation op = OperationFactory::getOperation(ctx);
   if (!op) {
@@ -63,4 +63,4 @@ bool Chip8::execute(uint16_t opcode) {
   }
   return op(ctx, *this) == 0;
 }
-} // namespace Chip8
+} // namespace chip8

@@ -4,7 +4,7 @@
 #include <array>
 #include <cstdint>
 
-namespace Device {
+namespace device {
 class Display {
 private:
   const unsigned int width;
@@ -18,6 +18,6 @@ public:
   bool draw(uint8_t x, uint8_t y, uint8_t row, uint8_t spriteLine);
   void show();
 };
-} // namespace Device
+} // namespace device
 
 #endif

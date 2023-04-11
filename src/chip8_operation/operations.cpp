@@ -8,7 +8,7 @@
 #include "chip8/chip8.h"
 #include "chip8_operation/operations.h"
 
-namespace Chip8Operation {
+namespace chip8Operation {
 // 0x0... operations
 int Operations::cls(OP_PARAMS) {
   proc.display->clearScreen();
@@ -319,4 +319,4 @@ int Operations::drw_x_y_nibble(OP_PARAMS) {
   }
   return 0;
 }
-} // namespace Chip8Operation
+} // namespace chip8Operation

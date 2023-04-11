@@ -3,11 +3,11 @@
 
 class Context;
 
-namespace Chip8 {
+namespace chip8 {
 class Chip8;
 }
 
-namespace Chip8Operation {
+namespace chip8Operation {
 class Operations {
 private:
   Operations()                   = delete;
@@ -15,7 +15,7 @@ private:
   ~Operations()                  = delete;
 
 public:
-#define OP_PARAMS [[maybe_unused]] Context &ctx, [[maybe_unused]] Chip8::Chip8 &proc
+#define OP_PARAMS [[maybe_unused]] Context &ctx, [[maybe_unused]] chip8::Chip8 &proc
 
   // 0x0... operations
   static int cls(OP_PARAMS);
@@ -61,6 +61,6 @@ public:
   static int rnd_x_kk(OP_PARAMS);
   static int drw_x_y_nibble(OP_PARAMS);
 };
-} // namespace Chip8Operation
+} // namespace chip8Operation
 
 #endif

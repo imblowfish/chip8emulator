@@ -2,7 +2,7 @@
 
 #include <fmt/core.h>
 
-namespace Device {
+namespace device {
 Display::Display() : width(64), height(32), buf{0} {}
 
 void Display::clearScreen() {
@@ -28,4 +28,4 @@ void Display::show() {
   }
   fmt::println("{}", screenImage);
 }
-} // namespace Device
+} // namespace device

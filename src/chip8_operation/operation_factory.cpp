@@ -4,7 +4,7 @@
 #include "chip8_operation/operations.h"
 #include "chip8_operation/operation_factory.h"
 
-namespace Chip8Operation {
+namespace chip8Operation {
 OperationFactory::Operation OperationFactory::getOperation(const Context &ctx) {
   switch (ctx.opcode) {
     CASE_OP(0x00E0, cls);
@@ -59,4 +59,4 @@ OperationFactory::Operation OperationFactory::getOperation(const Context &ctx) {
   }
   return nullptr;
 }
-} // namespace Chip8Operation
+} // namespace chip8Operation

@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <vector>
 
-namespace Chip8 {
+namespace chip8 {
 class Memory {
 private:
   size_t bs{0xEA0};
@@ -26,6 +26,6 @@ public:
 
   void loadProgram(std::filesystem::path romPath);
 };
-} // namespace Chip8
+} // namespace chip8
 
 #endif

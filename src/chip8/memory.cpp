@@ -8,7 +8,7 @@
 
 #include "chip8/memory.h"
 
-namespace Chip8 {
+namespace chip8 {
 Memory::Memory() {
   const std::vector<uint8_t> sprites = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -58,4 +58,4 @@ void Memory::loadProgram(std::filesystem::path romPath) {
   romFile.read(reinterpret_cast<char *>(data.data()), fileSize);
 }
 
-} // namespace Chip8
+} // namespace chip8

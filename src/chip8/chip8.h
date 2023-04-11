@@ -5,12 +5,12 @@
 #include <memory>
 #include <filesystem>
 
-namespace Device {
+namespace device {
 class Display;
 class Keyboard;
-} // namespace Device
+} // namespace device
 
-namespace Chip8 {
+namespace chip8 {
 class Memory;
 
 class Chip8 {
@@ -34,12 +34,12 @@ public:
   Registers regs;
 
   std::shared_ptr<Memory>           memory;
-  std::shared_ptr<Device::Display>  display;
-  std::shared_ptr<Device::Keyboard> keyboard;
+  std::shared_ptr<device::Display>  display;
+  std::shared_ptr<device::Keyboard> keyboard;
 
   Chip8(std::filesystem::path romPath);
   void start();
 };
-} // namespace Chip8
+} // namespace chip8
 
 #endif
