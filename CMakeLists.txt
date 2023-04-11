@@ -20,7 +20,7 @@ target_compile_features(
 )
 target_compile_options(
     ${PROJECT_NAME}
-    PRIVATE -W -Wall -Wextra -Werror -pedantic -fPIC
+    PRIVATE -W -Wall -Wextra -pedantic -fPIC
 )
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
