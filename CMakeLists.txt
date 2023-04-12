@@ -11,7 +11,7 @@ add_executable(${PROJECT_NAME})
 
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/project.h.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/project.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/project.hpp
 )
 
 target_compile_features(
@@ -22,8 +22,6 @@ target_compile_options(
     ${PROJECT_NAME}
     PRIVATE -W -Wall -Wextra -pedantic -fPIC
 )
-
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/precompiled.hpp)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})

@@ -2,4 +2,4 @@ build/
 scripts/
 third-party/
 
-src/project.h
+src/project.hpp
