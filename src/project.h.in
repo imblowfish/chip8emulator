@@ -1,5 +1,3 @@
-#include "precompiled.hpp"
-
 namespace {
 struct Project {
   const std::string name{"${CMAKE_PROJECT_NAME}"};

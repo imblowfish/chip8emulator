@@ -1,7 +1,14 @@
-#include "precompiled.hpp"
-#include "types.h"
-#include "operations.h"
-#include "chip8/chip8.h"
+#include "chip8/chip8.hpp"
+
+#include <fstream>
+#include <vector>
+#include <fmt/core.h>
+#include "chip8/opcode.hpp"
+
+namespace {
+constexpr size_t programStartAddress{0x200};
+constexpr std::chrono::milliseconds period{1000 / 60}; // Hz
+} // namespace
 
 namespace chip8 {
 Chip8::Chip8(std::filesystem::path romPath) {
@@ -11,12 +18,12 @@ Chip8::Chip8(std::filesystem::path romPath) {
   }
 
   const size_t fileSize = file_size(romPath);
-  if (fileSize > ram.size() - programStartAddress) {
+  if (fileSize > ctx.ram.size() - programStartAddress) {
     throw std::runtime_error("Can't fit program in RAM");
   }
 
   std::ifstream romFile(romPath, std::ios::binary);
-  romFile.read(reinterpret_cast<char *>(ram.data() + programStartAddress), fileSize);
+  romFile.read(reinterpret_cast<char *>(ctx.ram.data() + programStartAddress), fileSize);
 
   const std::vector<uint8_t> sprites = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -37,49 +44,39 @@ Chip8::Chip8(std::filesystem::path romPath) {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
   };
 
-  std::copy(sprites.cbegin(), sprites.cend(), ram.begin());
+  std::copy(sprites.cbegin(), sprites.cend(), ctx.ram.begin());
 }
 
 void Chip8::start() {
   using namespace std::chrono;
   using namespace std::chrono_literals;
 
-  regs.pc = 0x200;
+  auto &ram = ctx.ram;
+  auto &regs = ctx.regs;
 
-  milliseconds period{1000 / 60}; // 60Hz
-  auto         start = steady_clock::now();
+  regs.pc = programStartAddress;
 
+  auto start = steady_clock::now();
   while (true) {
+    opcode::Opcode opcode(ram[regs.pc] << 8 | ram[regs.pc + 1]);
+    auto operation = opcode::decode(opcode);
+
+    if (!operation.has_value()) {
+      throw std::runtime_error(fmt::format("Unknown opcode 0x{:X}", opcode.value));
+    }
+
+    fmt::println("Execute opcode 0x{:X}", opcode.value);
+    (*operation)(std::move(opcode), ctx);
+
+    // TODO: Update keyboard
+    // TODO: Update display
+
     if (steady_clock::now() - start < period) {
       continue;
     }
     start = steady_clock::now();
-
     regs.DT -= regs.DT ? 1 : 0;
     regs.ST -= regs.ST ? 1 : 0;
-
-    uint16_t opcode = ram[regs.pc] << 8 | ram[regs.pc + 1];
-
-    auto ctx = OperationContext{
-      .ram      = ram,
-      .display  = display,
-      .keyboard = keyboard,
-      .regs     = regs,
-
-      .addr   = static_cast<uint16_t>(opcode & 0x0FFF),
-      .byte   = static_cast<uint8_t>(opcode & 0x00FF),
-      .nibble = static_cast<uint8_t>(opcode & 0x000F),
-
-      .x = static_cast<uint8_t>(opcode & 0x0F00),
-      .y = static_cast<uint8_t>(opcode & 0x00F0),
-    };
-
-    fmt::println("Execute opcode 0x{:X}", opcode);
-    decode(opcode)(ctx);
-
-    // TODO: Execute operation
-    // TODO: Update keyboard
-    // TODO: Update display
   }
 }
 } // namespace chip8

@@ -1,7 +1,9 @@
-#include "precompiled.hpp"
-#include "project.h"
-#include "chip8/types.h"
-#include "chip8/chip8.h"
+#include <argparse/argparse.hpp>
+#include <fmt/core.h>
+#include <fmt/color.h>
+
+#include "project.hpp"
+#include "chip8/chip8.hpp"
 
 int main(int argc, char **argv) {
   argparse::ArgumentParser program(project.name, project.version);
@@ -12,12 +14,19 @@ int main(int argc, char **argv) {
   try {
     program.parse_args(argc, argv);
   } catch (const std::runtime_error &err) {
-    std::cerr << err.what() << "\n";
-    std::cerr << program;
-    return 1;
+    fmt::print(stderr, fmt::fg(fmt::color::crimson), "error: ");
+    fmt::println(stderr, "{}", err.what());
+    fmt::println(stderr, "{}", program.help().str());
+    return -1;
   }
 
-  chip8::Chip8 chip8{program.get("ROM path")};
-  chip8.start();
+  try {
+    chip8::Chip8 chip8{program.get("ROM path")};
+    chip8.start();
+  } catch (const std::runtime_error &err) {
+    fmt::println(stderr, "{}", err.what());
+    return -2;
+  }
+
   return 0;
 }
