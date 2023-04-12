@@ -1,10 +1,9 @@
 #ifndef __CHIP8_OPERATIONS__
 #define __CHIP8_OPERATIONS__
 
-#include <cstdint>
 #include <functional>
 #include <optional>
-#include "chip8/config.hpp"
+#include "chip8/component.hpp"
 #include "chip8/register.hpp"
 
 namespace chip8 {

@@ -2,8 +2,6 @@
 
 #include <random>
 #include <stack>
-#include "chip8/register.hpp"
-#include "chip8/config.hpp"
 
 namespace chip8 {
 namespace opcode {

@@ -21,7 +21,9 @@ int main(int argc, char **argv) {
   }
 
   try {
-    chip8::Chip8 chip8{program.get("ROM path")};
+    chip8::Chip8 chip8{program.get("ROM path"), []([[maybe_unused]] auto &display) {
+      fmt::println("Callback!");
+    }};
     chip8.start();
   } catch (const std::runtime_error &err) {
     fmt::println(stderr, "{}", err.what());

@@ -2,16 +2,19 @@
 #define __CHIP8_PROCESSOR_H__
 
 #include <filesystem>
-#include "chip8/config.hpp"
+#include "chip8/component.hpp"
 #include "chip8/opcode.hpp"
 
 namespace chip8 {
+using OnLoopStepCallback = std::function<void(const Display &)>;
+
 class Chip8 {
 private:
   opcode::Context ctx{};
+  OnLoopStepCallback callback;
 
 public:
-  Chip8(std::filesystem::path romPath);
+  Chip8(std::filesystem::path romPath, OnLoopStepCallback callback);
   [[noreturn]] void start();
 };
 } // namespace chip8

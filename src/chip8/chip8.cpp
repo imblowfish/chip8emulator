@@ -3,7 +3,6 @@
 #include <fstream>
 #include <vector>
 #include <fmt/core.h>
-#include "chip8/opcode.hpp"
 
 namespace {
 constexpr size_t programStartAddress{0x200};
@@ -11,7 +10,8 @@ constexpr std::chrono::milliseconds period{1000 / 60}; // Hz
 } // namespace
 
 namespace chip8 {
-Chip8::Chip8(std::filesystem::path romPath) {
+Chip8::Chip8(std::filesystem::path romPath, OnLoopStepCallback callback)
+    : callback(callback) {
   using namespace std::filesystem;
   if (!exists(romPath) || !is_regular_file(romPath) || is_empty(romPath)) {
     throw std::runtime_error("Can't open file");
@@ -69,7 +69,7 @@ void Chip8::start() {
     (*operation)(std::move(opcode), ctx);
 
     // TODO: Update keyboard
-    // TODO: Update display
+    callback(ctx.display);
 
     if (steady_clock::now() - start < period) {
       continue;
