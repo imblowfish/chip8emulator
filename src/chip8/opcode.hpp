@@ -1,5 +1,5 @@
-#ifndef __CHIP8_OPERATIONS__
-#define __CHIP8_OPERATIONS__
+#ifndef __CHIP8_OPCODE__
+#define __CHIP8_OPCODE__
 
 #include <functional>
 #include <optional>

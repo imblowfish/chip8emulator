@@ -1,5 +1,5 @@
-#ifndef __CHIP8_PROCESSOR_H__
-#define __CHIP8_PROCESSOR_H__
+#ifndef __CHIP8_H__
+#define __CHIP8_H__
 
 #include <filesystem>
 #include "chip8/component.hpp"

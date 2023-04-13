@@ -1,5 +1,5 @@
-#ifndef __CHIP8_REGISTERS__
-#define __CHIP8_REGISTERS__
+#ifndef __CHIP8_REGISTER__
+#define __CHIP8_REGISTER__
 
 #include <array>
 #include <cstdint>

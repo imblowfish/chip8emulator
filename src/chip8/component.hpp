@@ -1,5 +1,5 @@
-#ifndef __CHIP8_CONFIG__
-#define __CHIP8_CONFIG__
+#ifndef __CHIP8_COMPONENT__
+#define __CHIP8_COMPONENT__
 
 #include <array>
 #include <cstddef>
