@@ -68,8 +68,6 @@ void Chip8::start() {
     fmt::println("Execute opcode 0x{:X}", opcode.value);
     (*operation)(std::move(opcode), ctx);
 
-    // TODO: Update keyboard
-    callback(ctx.display);
 
     if (steady_clock::now() - start < period) {
       continue;
@@ -77,6 +75,9 @@ void Chip8::start() {
     start = steady_clock::now();
     regs.DT -= regs.DT ? 1 : 0;
     regs.ST -= regs.ST ? 1 : 0;
+
+    callback(ctx.display);
+    // TODO: Update keyboard
   }
 }
 } // namespace chip8

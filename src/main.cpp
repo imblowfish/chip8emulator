@@ -1,9 +1,12 @@
+#include <fstream>
+
 #include <argparse/argparse.hpp>
 #include <fmt/core.h>
 #include <fmt/color.h>
 
 #include "project.hpp"
 #include "chip8/chip8.hpp"
+#include "chip8/component.hpp"
 
 int main(int argc, char **argv) {
   argparse::ArgumentParser program(project.name, project.version);
@@ -21,9 +24,21 @@ int main(int argc, char **argv) {
   }
 
   try {
-    chip8::Chip8 chip8{program.get("ROM path"), []([[maybe_unused]] auto &display) {
-      fmt::println("Callback!");
-    }};
+    chip8::Chip8 chip8(program.get("ROM path"), [](const chip8::Display &display) {
+      std::ofstream displayDump("../display.txt");
+
+      std::vector<char> asciiDisplay{};
+      std::transform(display.cbegin(), display.cend(), std::back_inserter(asciiDisplay),
+                     [](auto value) {
+                       return value ? '#' : ' ';
+                     });
+
+      for (size_t i = chip8::screen.width; i < asciiDisplay.size(); i += chip8::screen.width + 1) {
+        asciiDisplay.insert(asciiDisplay.cbegin() + i, '\n');
+      }
+
+      displayDump.write(asciiDisplay.data(), asciiDisplay.size());
+    });
     chip8.start();
   } catch (const std::runtime_error &err) {
     fmt::println(stderr, "{}", err.what());
