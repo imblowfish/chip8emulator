@@ -32,7 +32,7 @@ void jumpToAddress(Opcode &&op, Context &ctx) {
 }
 
 void executeSubroutineAtAddress(Opcode &&op, Context &ctx) {
-  ctx.regs.stack.emplace(ctx.regs.pc + 2);
+  ctx.regs.stack.emplace(ctx.regs.pc);
   ctx.regs.pc = op.addr;
 }
 
