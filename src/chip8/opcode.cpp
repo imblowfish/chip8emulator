@@ -94,9 +94,9 @@ void subVyFromVx(Opcode &&op, Context &ctx) {
   ctx.regs.V[0xF] = prevX > ctx.regs.V[op.y];
 }
 
-void shiftVyRightByOneAndStoreInVx(Opcode &&op, Context &ctx) {
+void shiftVxRightByOne(Opcode &&op, Context &ctx) {
   ctx.regs.V[0xF] = ctx.regs.V[op.x] & 0x1;
-  ctx.regs.V[op.x] = ctx.regs.V[op.y] >> 1;
+  ctx.regs.V[op.x] = ctx.regs.V[op.x] >> 1;
 }
 
 void subVxFromVy(Opcode &&op, Context &ctx) {
@@ -105,9 +105,9 @@ void subVxFromVy(Opcode &&op, Context &ctx) {
   ctx.regs.V[0xF] = ctx.regs.V[op.y] > prevX;
 }
 
-void shiftVyLeftByOneAndStoreInVx(Opcode &&op, Context &ctx) {
+void shiftVxLeftByOne(Opcode &&op, Context &ctx) {
   ctx.regs.V[0xF] = ctx.regs.V[op.x] >> 7 & 0x1;
-  ctx.regs.V[op.x] = ctx.regs.V[op.y] << 1;
+  ctx.regs.V[op.x] = ctx.regs.V[op.x] << 1;
 }
 
 void skipIfVxNotEqVy(Opcode &&op, Context &ctx) {
@@ -254,11 +254,11 @@ Operation decode(const Opcode &opcode) {
         case 0x0005:
           return subVyFromVx;
         case 0x0006:
-          return shiftVyRightByOneAndStoreInVx;
+          return shiftVxRightByOne;
         case 0x0007:
           return subVxFromVy;
         case 0x000E:
-          return shiftVyLeftByOneAndStoreInVx;
+          return shiftVxLeftByOne;
         default:
           break;
       }
