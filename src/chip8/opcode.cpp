@@ -139,9 +139,9 @@ void drawSpriteDataAtVxVtStartingFromI(Opcode &&op, Context &ctx) {
 
   ctx.regs.V[0xF] = 0;
   for (auto sprite = begin; sprite < end; ++sprite) {
-    size_t yPos = (ctx.regs.V[op.y] + sprite - begin) % screen.height;
+    size_t yPos = ctx.regs.V[op.y] + sprite - begin;
     for (size_t i = 0; i < 8; i++) {
-      size_t xPos = (ctx.regs.V[op.x] + i) % screen.width;
+      size_t xPos = ctx.regs.V[op.x] + i;
 
       auto displayPos = ctx.display.begin() + yPos * screen.width + xPos;
       bool spriteValue = *sprite << i & 0x80;
