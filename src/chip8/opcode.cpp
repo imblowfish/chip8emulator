@@ -89,8 +89,9 @@ void addVyToVx(Opcode &&op, Context &ctx) {
 }
 
 void subVyFromVx(Opcode &&op, Context &ctx) {
-  ctx.regs.V[0xF] = ctx.regs.V[op.x] > ctx.regs.V[op.y];
+  uint8_t prevX = ctx.regs.V[op.x];
   ctx.regs.V[op.x] -= ctx.regs.V[op.y];
+  ctx.regs.V[0xF] = prevX > ctx.regs.V[op.y];
 }
 
 void shiftVyRightByOneAndStoreInVx(Opcode &&op, Context &ctx) {
@@ -99,8 +100,9 @@ void shiftVyRightByOneAndStoreInVx(Opcode &&op, Context &ctx) {
 }
 
 void subVxFromVy(Opcode &&op, Context &ctx) {
-  ctx.regs.V[0xF] = ctx.regs.V[op.y] > ctx.regs.V[op.x];
+  uint8_t prevX = ctx.regs.V[op.x];
   ctx.regs.V[op.x] = ctx.regs.V[op.y] - ctx.regs.V[op.x];
+  ctx.regs.V[0xF] = ctx.regs.V[op.y] > prevX;
 }
 
 void shiftVyLeftByOneAndStoreInVx(Opcode &&op, Context &ctx) {
