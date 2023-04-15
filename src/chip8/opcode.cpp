@@ -32,7 +32,7 @@ void jumpToAddress(Opcode &&op, Context &ctx) {
 }
 
 void executeSubroutineAtAddress(Opcode &&op, Context &ctx) {
-  ctx.regs.stack.emplace(ctx.regs.pc);
+  ctx.regs.stack.emplace(ctx.regs.pc + 2);
   ctx.regs.pc = op.addr;
 }
 
@@ -94,8 +94,8 @@ void subVyFromVx(Opcode &&op, Context &ctx) {
 }
 
 void shiftVyRightByOneAndStoreInVx(Opcode &&op, Context &ctx) {
-  ctx.regs.V[op.x] = ctx.regs.V[op.y] >> 1;
   ctx.regs.V[0xF] = ctx.regs.V[op.x] & 0x1;
+  ctx.regs.V[op.x] = ctx.regs.V[op.y] >> 1;
 }
 
 void subVxFromVy(Opcode &&op, Context &ctx) {
@@ -104,8 +104,8 @@ void subVxFromVy(Opcode &&op, Context &ctx) {
 }
 
 void shiftVyLeftByOneAndStoreInVx(Opcode &&op, Context &ctx) {
+  ctx.regs.V[0xF] = ctx.regs.V[op.x] >> 7 & 0x1;
   ctx.regs.V[op.x] = ctx.regs.V[op.y] << 1;
-  ctx.regs.V[0xF] = ctx.regs.V[op.x] & 0x1;
 }
 
 void skipIfVxNotEqVy(Opcode &&op, Context &ctx) {
@@ -215,7 +215,7 @@ Operation decode(const Opcode &opcode) {
   if (0x00EE == opcode.value) {
     return returnFromSubroutine;
   }
-  switch (opcode.head) {
+  switch (opcode.value & 0xF000) {
     case 0x1000:
       return jumpToAddress;
     case 0x2000:
@@ -277,7 +277,7 @@ Operation decode(const Opcode &opcode) {
       break;
     }
     case 0xF000: {
-      switch (opcode.nibble) {
+      switch (opcode.byte) {
         case 0x0007:
           return storeDelayTimerInVx;
         case 0x000A:

@@ -7,7 +7,7 @@
 
 namespace chip8 {
 struct Registers {
-  std::stack<uint8_t> stack{};
+  std::stack<uint16_t> stack{};
 
   size_t pc{};
   uint16_t I{};
