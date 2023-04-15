@@ -25,7 +25,7 @@ Chip8::Chip8(std::filesystem::path romPath, OnLoopStepCallback callback)
   std::ifstream romFile(romPath, std::ios::binary);
   romFile.read(reinterpret_cast<char *>(ctx.ram.data() + programStartAddress), fileSize);
 
-  const std::vector<uint8_t> sprites = {
+  const std::vector<uint8_t> sprites{
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70, // 1
     0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
@@ -58,20 +58,21 @@ void Chip8::start() {
 
   auto start = steady_clock::now();
   while (true) {
-    opcode::Opcode opcode(ram[regs.pc] << 8 | ram[regs.pc + 1]);
-    auto operation = opcode::decode(opcode);
-
-    if (!operation.has_value()) {
-      throw std::runtime_error(fmt::format("Unknown opcode 0x{:X}", opcode.value));
-    }
-
-    fmt::println("Execute opcode 0x{:X}", opcode.value);
-    (*operation)(std::move(opcode), ctx);
-
-
     if (steady_clock::now() - start < period) {
       continue;
     }
+
+    opcode::Opcode opcode(ram[regs.pc] << 8 | ram[regs.pc + 1]);
+    regs.pc += 2;
+    auto operation = opcode::decode(opcode);
+
+    if (!operation.has_value()) {
+      throw std::runtime_error(fmt::format("Unknown opcode {:#04X}", opcode.value));
+    }
+
+    fmt::println("Execute opcode {:#04X}", opcode.value);
+    (*operation)(std::move(opcode), ctx);
+
     start = steady_clock::now();
     regs.DT -= regs.DT ? 1 : 0;
     regs.ST -= regs.ST ? 1 : 0;

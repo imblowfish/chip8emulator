@@ -19,7 +19,7 @@ namespace {
 // https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set
 
 void clearScreen([[maybe_unused]] Opcode &&op, Context &ctx) {
-  ctx.display.fill(false);
+  ctx.display = Display{};
 }
 
 void returnFromSubroutine([[maybe_unused]] Opcode &&op, Context &ctx) {
@@ -135,13 +135,20 @@ void drawSpriteDataAtVxVtStartingFromI(Opcode &&op, Context &ctx) {
   auto begin = ctx.ram.cbegin() + ctx.regs.I;
   auto end = begin + op.nibble;
 
-  auto displayPos = ctx.display.begin() + op.y * screen.width + op.x;
+  ctx.regs.V[0xF] = 0;
+  for (auto sprite = begin; sprite < end; ++sprite) {
+    size_t yPos = op.y + sprite - begin - 1;
+    for (size_t i = 0; i < 8; i++) {
+      size_t xPos = op.x + i - 1;
 
-  for (auto spriteIt = begin; spriteIt != end; ++spriteIt, ++displayPos) {
-    for (ssize_t i = 7; i >= 0; --i) {
-      bool spriteValue = *spriteIt >> i & 0x1;
-      ctx.regs.V[0xF] = ctx.regs.V[0xF] ? ctx.regs.V[0xF] : spriteValue && !(*displayPos);
-      *displayPos = spriteValue;
+      auto displayPos = ctx.display.begin() + yPos * screen.width + xPos;
+      bool spriteValue = *sprite << i & 0x80;
+
+      if (spriteValue && *displayPos) {
+        ctx.regs.V[0xF] = 1;
+      }
+
+      *displayPos ^= spriteValue;
     }
   }
 }
